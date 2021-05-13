@@ -71,35 +71,145 @@ import 'package:flutter/material.dart';
 //====================  AULA 2 CURSO DE FLUTTER INICIO DA APLICAÇÃO =====================================================================================================
 
 //====================  AULA 3 CURSO DE FLUTTER OTIMIZAÇÃO DA APLICAÇÃO =====================================================================================================
-void main() => runApp(
-  MaterialApp(
-    home: Scaffold(
-      body: listaTransferencia(),
+// void main() => runApp(
+//   MaterialApp(
+//     home: Scaffold(
+//       body: listaTransferencia(),
+//       appBar: AppBar(
+//         title: Text(' Transferências'),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         child: Icon(Icons.add),
+//       ),
+//     ),
+//   ),
+// );
+//
+// class listaTransferencia extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: <Widget>[
+//         ItemTransferencia(
+//           Tranferencia(100.0, 1000),
+//         ),
+//         ItemTransferencia(
+//           Tranferencia(200.0, 1001),
+//         ),
+//         ItemTransferencia(
+//           Tranferencia(300.0, 1002),
+//         ),
+//       ],
+//     );
+//   }
+// }
+//
+// class ItemTransferencia extends StatelessWidget {
+//   final Tranferencia _tranferencia;
+//
+//   ItemTransferencia(this._tranferencia);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//         child: ListTile(
+//       leading: Icon(
+//         Icons.monetization_on,
+//       ),
+//       title: Text(_tranferencia.valor.toString()),
+//       subtitle: Text(_tranferencia.numeroConta.toString()),
+//     ));
+//   }
+// }
+//
+// class Tranferencia{
+//
+//   final double valor;
+//   final int numeroConta;
+//
+//   Tranferencia(this.valor, this.numeroConta);
+// }
+//====================  AULA 3 CURSO DE FLUTTER OTIMIZAÇÃO DA APLICAÇÃO =====================================================================================================
+
+//====================  AULA 4 CURSO DE FLUTTER CRIAÇÃO DO FORMULARIO =====================================================================================================
+void main() => runApp(BytebankApp());
+
+class BytebankApp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      home: Scaffold(
+        body: FormularioTransferencia(),
+      ),
+    );
+  }
+
+}
+
+class FormularioTransferencia extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
-        title: Text(' Transferências'),
+        title: Text('Criando Transferência '),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              style: TextStyle(fontSize: 24.0),
+              decoration: InputDecoration(
+                  labelText: 'Valor',
+                  hintText: '0000'),
+            keyboardType: TextInputType.number,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              style: TextStyle(fontSize: 24.0),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.monetization_on),
+                  labelText: 'Valor',
+                  hintText: '0.00'),
+            keyboardType: TextInputType.number,
+            ),
+          ),
+          ElevatedButton(
+            child: Text('confirmar'),
+
+          ),
+        ],
       ),
-    ),
-  ),
-);
+    );
+  }
+}
 
 class listaTransferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ItemTransferencia(
-          Tranferencia(100.0, 1000),
-        ),
-        ItemTransferencia(
-          Tranferencia(200.0, 1001),
-        ),
-        ItemTransferencia(
-          Tranferencia(300.0, 1002),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(' Transferências'),
+      ),
+      body: Column(
+        children: <Widget>[
+          ItemTransferencia(
+            Tranferencia(100.0, 1000),
+          ),
+          ItemTransferencia(
+            Tranferencia(200.0, 1001),
+          ),
+          ItemTransferencia(
+            Tranferencia(300.0, 1002),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
@@ -113,12 +223,12 @@ class ItemTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-      leading: Icon(
-        Icons.monetization_on,
-      ),
-      title: Text(_tranferencia.valor.toString()),
-      subtitle: Text(_tranferencia.numeroConta.toString()),
-    ));
+          leading: Icon(
+            Icons.monetization_on,
+          ),
+          title: Text(_tranferencia.valor.toString()),
+          subtitle: Text(_tranferencia.numeroConta.toString()),
+        ));
   }
 }
 
@@ -129,4 +239,4 @@ class Tranferencia{
 
   Tranferencia(this.valor, this.numeroConta);
 }
-//====================  AULA 3 CURSO DE FLUTTER OTIMIZAÇÃO DA APLICAÇÃO =====================================================================================================
+//====================  AULA 4 CURSO DE FLUTTER CRIAÇÃO DO FORMULARIO =====================================================================================================
