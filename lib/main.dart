@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 
 //====================  EXERCICIO 1 CURSO DE FLUTTER ARVORE DE WIDGETS =====================================================================================================
@@ -271,7 +273,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: FormularioTransferencia(),
+        body: listaTransferencia(),
       ),
     );
   }
@@ -279,7 +281,7 @@ class BytebankApp extends StatelessWidget {
 
 class FormularioTransferencia extends StatelessWidget {
   final TextEditingController _controladorCampoNumeroConta =
-      TextEditingController();
+  TextEditingController();
 
   final TextEditingController _ControladorCampoValor = TextEditingController();
 
@@ -303,9 +305,7 @@ class FormularioTransferencia extends StatelessWidget {
             icone: Icons.monetization_on,
           ),
           ElevatedButton(
-
-            onPressed: () => _criaTransferencia(),
-
+            onPressed: () => _criaTransferencia(context),
             child: Text('confirmar'),
           ),
         ],
@@ -313,13 +313,14 @@ class FormularioTransferencia extends StatelessWidget {
     );
   }
 
-  void _criaTransferencia() {
-    final int numeroConta =
-        int.tryParse(_controladorCampoNumeroConta.text);
+  void _criaTransferencia(BuildContext context) {
+    final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double valor = double.tryParse(_ControladorCampoValor.text);
 
     if (numeroConta != null && valor != null) {
       final tranferenciaCriada = Tranferencia(valor, numeroConta);
+      debugPrint('Criando Tranferência');
+      Navigator.pop(context, tranferenciaCriada);
     }
   }
 }
@@ -346,6 +347,17 @@ class listaTransferencia extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
+        onPressed: () {
+          final Future<Tranferencia> future =
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return FormularioTransferencia();
+          }));
+
+          future.then((transferenciaRecebida) {
+            debugPrint('Chegou no then do future');
+            debugPrint('$transferenciaRecebida');
+          });
+        },
       ),
     );
   }
@@ -386,12 +398,12 @@ class ItemTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-      leading: Icon(
-        Icons.monetization_on,
-      ),
-      title: Text(_tranferencia.valor.toString()),
-      subtitle: Text(_tranferencia.numeroConta.toString()),
-    ));
+          leading: Icon(
+            Icons.monetization_on,
+          ),
+          title: Text(_tranferencia.valor.toString()),
+          subtitle: Text(_tranferencia.numeroConta.toString()),
+        ));
   }
 }
 
