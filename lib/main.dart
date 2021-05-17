@@ -277,7 +277,14 @@ class BytebankApp extends StatelessWidget {
   }
 }
 
-class FormularioTransferencia extends StatelessWidget {
+class FormularioTransferencia extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
+  }
+}
+
+class FormularioTransferenciaState extends State<FormularioTransferencia> {
   final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
 
@@ -289,24 +296,26 @@ class FormularioTransferencia extends StatelessWidget {
       appBar: AppBar(
         title: Text('Criando Transferência '),
       ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            controller: _ControladorCampoValor,
-            dica: '0000',
-            rotulo: 'Número da conta',
-          ),
-          Editor(
-            controller: _controladorCampoNumeroConta,
-            dica: '0.00',
-            rotulo: 'Valor',
-            icone: Icons.monetization_on,
-          ),
-          ElevatedButton(
-            onPressed: () => _criaTransferencia(context),
-            child: Text('confirmar'),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              controller: _ControladorCampoValor,
+              dica: '0000',
+              rotulo: 'Número da conta',
+            ),
+            Editor(
+              controller: _controladorCampoNumeroConta,
+              dica: '0.00',
+              rotulo: 'Valor',
+              icone: Icons.monetization_on,
+            ),
+            ElevatedButton(
+              onPressed: () => _criaTransferencia(context),
+              child: Text('confirmar'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -314,19 +323,25 @@ class FormularioTransferencia extends StatelessWidget {
   void _criaTransferencia(BuildContext context) {
     final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double valor = double.tryParse(_ControladorCampoValor.text);
-
     if (numeroConta != null && valor != null) {
       final tranferenciaCriada = Tranferencia(valor, numeroConta);
       debugPrint('Criando Tranferência');
+      debugPrint('$tranferenciaCriada');
       Navigator.pop(context, tranferenciaCriada);
     }
   }
 }
 
-class listaTransferencia extends StatelessWidget {
-
+class listaTransferencia extends StatefulWidget {
   final List<Tranferencia> _transferencias = [];
 
+  @override
+  State<StatefulWidget> createState() {
+    return ListaTransferenciasState();
+  }
+}
+
+class ListaTransferenciasState extends State<listaTransferencia> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -334,15 +349,12 @@ class listaTransferencia extends StatelessWidget {
         title: Text(' Transferências'),
       ),
       body: ListView.builder(
-
-        itemCount: _transferencias.length,
-        itemBuilder: (context, indice){
-
-          final transferencia = _transferencias[indice];
+        itemCount: widget._transferencias.length,
+        itemBuilder: (context, indice) {
+          final transferencia = widget._transferencias[indice];
 
           return ItemTransferencia(transferencia);
         },
-
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -352,10 +364,17 @@ class listaTransferencia extends StatelessWidget {
             return FormularioTransferencia();
           }));
 
-          future.then((transferenciaRecebida) {
-            debugPrint('Chegou no then do future');
-            debugPrint('$transferenciaRecebida');
-            _transferencias.add(transferenciaRecebida);
+          future.then((transferenciaRecebida){
+            Future.delayed(Duration(seconds: 2), () {
+              debugPrint('Chegou no then do future');
+              debugPrint('$transferenciaRecebida');
+
+              if (transferenciaRecebida != null) {
+                setState(() {
+                  widget._transferencias.add(transferenciaRecebida);
+                });
+              }
+            });
           });
         },
       ),
