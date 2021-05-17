@@ -138,6 +138,7 @@ class BytebankApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
+    
     return MaterialApp(
       home: Scaffold(
         body: FormularioTransferencia(),
@@ -148,6 +149,12 @@ class BytebankApp extends StatelessWidget{
 }
 
 class FormularioTransferencia extends StatelessWidget {
+
+  final TextEditingController _controladorCampoNumeroConta =
+      TextEditingController();
+
+  final TextEditingController _ControladorCampoValor = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,27 +166,37 @@ class FormularioTransferencia extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              controller: _controladorCampoNumeroConta,
               style: TextStyle(fontSize: 24.0),
-              decoration: InputDecoration(
-                  labelText: 'Valor',
-                  hintText: '0000'),
-            keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Valor', hintText: '0000'),
+              keyboardType: TextInputType.number,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+
+              controller: _ControladorCampoValor,
               style: TextStyle(fontSize: 24.0),
               decoration: InputDecoration(
                   icon: Icon(Icons.monetization_on),
                   labelText: 'Valor',
                   hintText: '0.00'),
-            keyboardType: TextInputType.number,
+              keyboardType: TextInputType.number,
             ),
           ),
           ElevatedButton(
-            child: Text('confirmar'),
+            onPressed: () {
 
+              final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+              final double valor = double.tryParse(_ControladorCampoValor.text);
+
+              if(numeroConta != null && valor != null){
+               final  tranferenciaCriada = Tranferencia(valor, numeroConta);
+               debugPrint('$tranferenciaCriada');
+              }
+              },
+            child: Text('confirmar'),
           ),
         ],
       ),
@@ -238,5 +255,10 @@ class Tranferencia{
   final int numeroConta;
 
   Tranferencia(this.valor, this.numeroConta);
+
+  @override
+  String toString() {
+    return 'Tranferencia{valor: $valor, numeroConta: $numeroConta}';
+  }
 }
 //====================  AULA 4 CURSO DE FLUTTER CRIAÇÃO DO FORMULARIO =====================================================================================================
