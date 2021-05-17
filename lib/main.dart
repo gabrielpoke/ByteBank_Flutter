@@ -270,9 +270,8 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: listaTransferencia(),
-      ),
+      theme: ThemeData.dark(),
+      home: listaTransferencia(),
     );
   }
 }
@@ -364,7 +363,7 @@ class ListaTransferenciasState extends State<listaTransferencia> {
             return FormularioTransferencia();
           }));
 
-          future.then((transferenciaRecebida){
+          future.then((transferenciaRecebida) {
             Future.delayed(Duration(seconds: 2), () {
               debugPrint('Chegou no then do future');
               debugPrint('$transferenciaRecebida');
