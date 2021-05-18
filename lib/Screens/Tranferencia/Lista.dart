@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'Formulario.dart';
 
+const _tituloAppBar = 'Transferências';
+
+// ignore: camel_case_types
 class listaTransferencia extends StatefulWidget {
   final List<Tranferencia> _transferencias = [];
 
@@ -18,7 +21,7 @@ class ListaTransferenciasState extends State<listaTransferencia> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Transferências'),
+        title: Text(_tituloAppBar),
       ),
       body: ListView.builder(
         itemCount: widget._transferencias.length,
@@ -31,26 +34,20 @@ class ListaTransferenciasState extends State<listaTransferencia> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          final Future<Tranferencia> future =
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormularioTransferencia();
-          }));
-
-          future.then((transferenciaRecebida) {
-            Future.delayed(Duration(seconds: 2), () {
-              debugPrint('Chegou no then do future');
-              debugPrint('$transferenciaRecebida');
-
-              if (transferenciaRecebida != null) {
-                setState(() {
-                  widget._transferencias.add(transferenciaRecebida);
-                });
-              }
-            });
-          });
+          })).then((transferenciaRecebida) => _atualiza(transferenciaRecebida));
         },
       ),
     );
+  }
+
+  void _atualiza(Tranferencia transferenciaRecebida) {
+    if (transferenciaRecebida != null) {
+      setState(() {
+        widget._transferencias.add(transferenciaRecebida);
+      });
+    }
   }
 }
 
@@ -63,11 +60,11 @@ class ItemTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-      leading: Icon(
-        Icons.monetization_on,
-      ),
-      title: Text(_tranferencia.valor.toString()),
-      subtitle: Text(_tranferencia.numeroConta.toString()),
-    ));
+          leading: Icon(
+            Icons.monetization_on,
+          ),
+          title: Text(_tranferencia.valor.toString()),
+          subtitle: Text(_tranferencia.numeroConta.toString()),
+        ));
   }
 }
